@@ -1,0 +1,399 @@
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+    background-color: #f8f9fb;
+}
+
+a {
+    text-decoration: none;
+}
+
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+.container-login,
+.container-sign {
+    text-align: center;
+    color: aliceblue;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -20%;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555555;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.login,
+.sign {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* background-color: #2f4050; */
+}
+
+.login .login-wrap,
+.sign .sign-wrap {
+    position: relative;
+    max-width: 380px;
+    margin: 180px auto 40px auto;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.login .login-wrap {
+    padding: 100px 40px 40px;
+}
+
+.sign .sign-wrap {
+    padding: 60px 40px 40px;
+}
+
+.login .sign-up,
+.sign .sign-up {
+    background-color: #fff;
+    max-width: 380px;
+    margin: 180px auto;
+    padding: 6px;
+    margin-top: 40px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.login .login-wrap .avatar {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    overflow: hidden;
+    width: 140px;
+    height: 140px;
+    margin-left: -70px;
+    border: 10px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 5px #ccc;
+}
+
+.footer {
+    margin: 25vh .3vw 2vw;
+}
+
+.footer p {
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 2px;
+    text-align: center;
+    line-height: 1.8;
+}
+
+.footer p a {
+    color: #fff;
+    -webkit-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+    transition: 0.5s all;
+}
+
+.footer p a:hover {
+    color: #f7296f;
+    -webkit-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+    transition: 0.5s all;
+}
+
+.footer p a i {
+    display: inline-block;
+    width: 14px;
+    height: 16px;
+    margin-right: 6px;
+    background: url(../img/icon-police.png) 0 0 no-repeat;
+    vertical-align: middle;
+    margin-top: -4px;
+}
+
+
+/*针对输入框的操作*/
+
+.success {
+    border: 1px solid red;
+    box-shadow: 1px 1px 6px red;
+}
+
+
+/* 首页css */
+
+.main {
+    position: relative;
+    overflow: hidden;
+    min-width: 844px;
+    min-height: 100vh;
+    padding: 70px 5px 20px 185px;
+}
+
+.main .navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    z-index: 20;
+    padding: 0 15px 0 10px;
+    border: 0;
+    border-bottom: 1px solid #333;
+    height: 70px;
+    background: url(../img/bg.jpg) no-repeat 0 -1000px;
+}
+
+.per-message {
+    transform: translateX(90px);
+}
+
+.navbar .logo {
+    float: left;
+    margin-top: 10px;
+    line-height: 70px;
+    color: #fff;
+}
+
+.navbar .logo h1 {
+    font-size: 24px;
+}
+
+.navbar .logo h1 a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.navbar .logo img {
+    margin-right: 10px;
+}
+
+.navbar-nav {
+    display: block;
+}
+
+.navbar-nav li {
+    font-size: 16px;
+    margin-right: 10px;
+    display: inline-block
+}
+
+.navright li {
+    float: left;
+    margin-right: 10px;
+}
+
+.navbar-nav li:first-child {
+    margin-right: 20px;
+}
+
+.navbar-nav li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.navbar-nav li a svg {
+    margin-right: 4px;
+}
+
+.container-fluid {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+aside {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 180px;
+    height: 100%;
+    background-color: #b5cfd9;
+}
+
+aside li a {
+    text-decoration: none;
+    color: #3a4b76;
+}
+
+aside .nav li a:hover {
+    color: aliceblue;
+    text-decoration: none;
+    display: block;
+    background-color: #71a0ff7a;
+}
+
+aside .nav .active>a {
+    display: block;
+    color: #f6f6f6;
+    background-color: #71a0ff7a;
+}
+
+#menu-manger,
+#post-manger {
+    display: block;
+}
+
+aside .nav li {
+    display: block;
+    width: 100%;
+    padding: 5px 0;
+    text-align: center;
+    line-height: 30px;
+    font-size: 16px;
+    /* margin-bottom: 10px; */
+    /* border-bottom: 1px solid #a9b0c2; */
+    color: #fff;
+}
+
+
+/* 中间部分 */
+
+.container-fluid {
+    margin-top: 20px;
+}
+
+.con-one {
+    background-color: #eeeeee;
+    padding: 40px 60px;
+    margin-bottom: 40px;
+}
+
+.con-one p {
+    margin-bottom: 15px;
+    font-size: 21px;
+    font-weight: 400;
+}
+
+.con-one a.btn {
+    background-color: #9ed0fd;
+}
+
+.panel-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 16px;
+    color: inherit;
+}
+
+.panel-default>.panel-heading {
+    color: #333333;
+    background-color: #f5f5f5;
+    border-color: #dddddd;
+}
+
+.panel-heading {
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+.people {
+    padding-top: 40px;
+}
+
+.page-title {
+    margin-bottom: 60px;
+}
+
+.message .control-label {
+    text-align: right;
+}
+
+.form-image {
+    position: relative;
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+}
+
+.form-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 150px;
+}
+
+.mask::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -14px;
+    margin-left: -14px;
+}
+
+.form-image i {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transition: opacity 0.3s;
+    text-align: center;
+    opacity: 0;
+    background: #c0c0c0;
+    font-size: 2em;
+}
+
+.form-image i:hover {
+    opacity: 0.3;
+}
+
+#avatar {
+    display: none;
+    width: 150px;
+    height: 150px;
+    outline: none;
+}
+
+.message .form-group label,
+.message .form-group p {
+    color: #555;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.message .form-group input {
+    margin-bottom: 5px;
+}
+
+textarea.form-control {
+    height: auto;
+}
+
+.update button.btn {
+    font-size: 14px;
+    margin-right: 19px;
+    background-color: #9ed0fd;
+}
+
+.update .row a {
+    font-size: 14px;
+    color: #595e6d;
+    text-decoration: none;
+}

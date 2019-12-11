@@ -1,0 +1,6 @@
+RewriteEngine on  //on为打开,off为关闭
+RewriteRule ^login$ login.php
+RewriteRule ^index$ index.php   
+RewriteRule ^sign-up$ sign-up.php 
+RewriteRule ^personal$ personal.php 
+ErrorDocument 404 /404.txt 

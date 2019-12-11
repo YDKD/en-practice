@@ -1,0 +1,58 @@
+{
+  "id": "1549825",
+  "name": "工程实践",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "2727655",
+      "name": "基本信息",
+      "font_class": "basic-information",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
+      "icon_id": "2974399",
+      "name": "稿件",
+      "font_class": "gaojian",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "5276535",
+      "name": "1人员管理",
+      "font_class": "renyuanguanli",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "6425592",
+      "name": "修改密码",
+      "font_class": "xiugaimima",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "7333060",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
+      "icon_id": "7761655",
+      "name": "退出",
+      "font_class": "tuichu",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "11837024",
+      "name": "个人中心 - 选中",
+      "font_class": "gerenzhongxin-xuanzhong",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    }
+  ]
+}
