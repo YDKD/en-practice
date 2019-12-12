@@ -3,4 +3,7 @@ RewriteRule ^login$ login.php
 RewriteRule ^index$ index.php   
 RewriteRule ^sign-up$ sign-up.php 
 RewriteRule ^personal$ personal.php 
+RewriteRule ^reset-pass$ reset-pass.php
+RewriteRule ^users-spe$ users-spe.php 
+RewriteRule ^users-author$ users-author.php
 ErrorDocument 404 /404.txt 

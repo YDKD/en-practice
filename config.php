@@ -8,7 +8,7 @@ define('EP_HOST','localhost');
 define('EP_USER', 'root');
 
 // 配置连接的数据库的密码
-define('EP_PASS', 'root');
+define('EP_PASS', '123456');
 
 // 配置连接的数据库的名字
 define('EP_NAME', 'en-practice');

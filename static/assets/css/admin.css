@@ -240,7 +240,8 @@ aside li a {
     color: #3a4b76;
 }
 
-aside .nav li a:hover {
+aside .nav li a:hover,
+aside .nav li a:focus {
     color: aliceblue;
     text-decoration: none;
     display: block;
@@ -396,4 +397,79 @@ textarea.form-control {
     font-size: 14px;
     color: #595e6d;
     text-decoration: none;
+}
+
+
+/* 密码修改部分 */
+
+.reset {
+    width: 100%;
+    font-size: 14px;
+    border: solid 1px #ddd;
+    border-radius: 4px;
+}
+
+.res-head {
+    padding: 10px 15px;
+    border-radius: 4px 4px 0 0;
+    background-color: #e8e8e8;
+    border-bottom: solid 1px #ddd;
+}
+
+.res-content {
+    padding: 20px 15px;
+}
+
+.res-content .control-label {
+    text-align: right;
+}
+
+.res-content .put {
+    line-height: 42px;
+}
+
+.put .col-sm-10 {
+    padding-left: 0;
+}
+
+.put .field input {
+    width: 20%;
+    float: left;
+    height: 80%;
+}
+
+.put .field .input-help {
+    float: left;
+}
+
+.put .field .input-help ul {
+    list-style: none;
+}
+
+.put .field .input-help ul li {
+    float: left;
+    padding-right: 10px;
+}
+
+.check-error input,
+.check-error input:focus {
+    border: 1px solid #e33;
+    box-shadow: none;
+}
+
+.check-error .input-help {
+    color: #e33;
+}
+
+.check-error textarea,
+.check-error textarea:focus {
+    border: 1px solid #e33;
+    box-shadow: none;
+}
+
+
+/* 隐藏信息 */
+
+#hidden {
+    display: none;
 }

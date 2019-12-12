@@ -121,3 +121,24 @@ function level_judge($level)
 
     return $result;
 }
+
+// 封装一个session信息更新函数
+
+function update_session($id) {
+    $conn = mysqli_connect(EP_HOST, EP_USER, EP_PASS, EP_NAME);
+    if(!$conn) {
+        exit('数据库连接失败');
+    }
+
+    mysqli_set_charset($conn, 'utf8');
+    
+    $query = mysqli_query($conn, "SELECT * FROM users WHERE id = '{$id}'");
+
+    if(!$query) {
+        exit('查询失败');
+    }
+
+    $user = mysqli_fetch_assoc($query);
+
+    $_SESSION['current_login_user'] = $user;
+}

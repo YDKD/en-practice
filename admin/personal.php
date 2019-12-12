@@ -21,12 +21,14 @@ function personal()
     //接收用户传过来的级别和简介
     $bio =  empty($_POST['bio']) ? $current_user['bio'] : $_POST['bio'];
 
+    // 同步数据
+    $current_user['bio'] = $bio;
+    
     $row = en_excute("UPDATE users SET  bio = '{$bio}' WHERE id = '{$id}'; ");
     $success = $row > 0;
     $message = $row <= 0 ? '更新失败' : '更新成功';
 
-    $current_user['bio'] = $bio;
-    var_dump($current_user['bio']);
+   
 }
 
 // 首先判断当前用户提交的数据方式
@@ -39,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>投稿系统-首页</title>
+    <title>投稿系统-修改密码</title>
     <!-- 引入Bootstrap.css -->
     <link rel="stylesheet" href="/static/assets/vendors/boostrap/css/bootstrap.css">
     <!-- 引入动画css -->
@@ -55,6 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="icon" href="/static/uploads/favicon.ico" type="image/x-icon" />
     <!-- 引入进度条显示js -->
     <script src="/static/assets/vendors/nprogress/nprogress.js"></script>
+    <!-- 引入jquery -->
+    <script src="/static/assets/vendors/jquery/jquery.js"></script>
+    <!-- 引入pintuer.js的框架验证 -->
+    <script src="/static/assets/vendors/pintuer/pintuer.js"></script>
 </head>
 
 <body>
@@ -120,11 +126,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group put">
                     <div class="row">
                         <label for="bio" class="col-sm-3 control-label">简介</label>
-                        <div class="col-sm-6">
-                            <textarea id="bio" class="form-control" cols="30" rows="6" name="bio" placeholder="<?php echo $_SESSION['bio']; ?>"><?php echo empty($_POST['bio']) ? '' : $_POST['bio']; ?></textarea>
+                        <div class="col-sm-6 field">
+                            <textarea id="bio" class="form-control" data-validate="required:简介不能为空" cols="30" rows="6" name="bio" placeholder="<?php echo $_SESSION['bio']; ?>"><?php echo empty($_POST['bio']) ? '' : $_POST['bio']; ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -133,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="col-sm-3 control-label"></div>
                         <div class="col-sm-6">
                             <button type="submit" class="btn btn-primary">更新</button>
-                            <a class="pas" href="password-reset.html">修改密码</a>
+                            <a class="pas" href="reset-pass">修改密码</a>
                         </div>
                     </div>
                 </div>
@@ -148,28 +154,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- 侧边栏 -->
     <?php include './inc/slidebar.php'; ?>
 
-    <!-- 引入jquery -->
-    <script src="/static/assets/vendors/jquery/jquery.js"></script>
+    
     <script src="/static/assets/vendors/jquery/popper.min.js"></script>
     <script src="/static/assets/vendors/boostrap/js/bootstrap.min.js"></script>
     <!-- 引入字体的js -->
     <script src="/static/assets/vendors/font/iconfont.js"></script>
     <script>
         NProgress.done()
-    </script>
-    <script>
-        $(function() {
-            $('#bio').on('load', function() {
-                $value = $(this).attr('placeholder');
-
-                $.get('/admin/api/bio.php', {
-                    bio: $value
-                }, function(res) {
-                   $('#bio').attr('placeholder', res)
-                })
-
-            })
-        })
     </script>
 </body>
 
