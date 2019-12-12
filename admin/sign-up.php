@@ -1,7 +1,7 @@
 <?php
 
 //载入配置文件
-require '../function.php';
+require_once '../function.php';
 
 
 function sign_up()

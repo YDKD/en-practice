@@ -1,12 +1,38 @@
 <?php
 //首先载入配置文件
-require '../function.php';
+require_once '../function.php';
 
 //先判断是否登录了，再进行后续
 en_get_current_user();
 
-//拿到登录用户的数据
-$current_user = en_get_current_user();
+session_start();
+
+function personal()
+{
+    // 定义全局变量
+    global $message, $success, $bio;
+
+    // 获取当前登录用户信息
+    $current_user = en_get_current_user();
+
+    //接收用户ID，为了后续的更新操作
+    $id = $current_user['id'];
+
+    //接收用户传过来的级别和简介
+    $bio =  empty($_POST['bio']) ? $current_user['bio'] : $_POST['bio'];
+
+    $row = en_excute("UPDATE users SET  bio = '{$bio}' WHERE id = '{$id}'; ");
+    $success = $row > 0;
+    $message = $row <= 0 ? '更新失败' : '更新成功';
+
+    $current_user['bio'] = $bio;
+    var_dump($current_user['bio']);
+}
+
+// 首先判断当前用户提交的数据方式
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    personal();
+}
 
 ?>
 <!DOCTYPE html>
@@ -43,7 +69,27 @@ $current_user = en_get_current_user();
             <div class="page-title text-center">
                 <h3>我的个人资料</h3>
             </div>
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" class="message">
+            <form action="/admin/personal" class="message" method="POST">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-6">
+
+                            <?php if (isset($message)) : ?>
+                                <?php if ($success) : ?>
+                                    <div class="alert alert-success">
+                                        <strong>成功！</strong><?php echo $message; ?>
+                                    </div>
+                                <?php else : ?>
+                                    <div class="alert alert-danger">
+                                        <strong>错误！</strong><?php echo $message; ?>
+                                    </div>
+                                <?php endif ?>
+                            <?php endif ?>
+
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="row">
                         <label class="col-sm-3 control-label">头像</label>
@@ -60,7 +106,8 @@ $current_user = en_get_current_user();
                     <div class="row">
                         <label for="level" class="col-sm-3 control-label">级别</label>
                         <div class="col-sm-6">
-                            <input id="level" class="form-control" name="level" type="type" value="管理员" placeholder="level" readonly>
+                            <input id="level" class="form-control" name="level" type="type" value="<?php echo $current_user['nickname']; ?>" placeholder="level" readonly>
+                            <p class="help-block">当前级别不允许修改</p>
                         </div>
                     </div>
                 </div>
@@ -68,17 +115,8 @@ $current_user = en_get_current_user();
                     <div class="row">
                         <label for="email" class="col-sm-3 control-label">邮箱</label>
                         <div class="col-sm-6">
-                            <input id="email" class="form-control" name="email" type="type" value="w@zce.me" placeholder="邮箱" readonly>
+                            <input id="email" class="form-control" name="email" type="type" value="<?php echo $current_user['email']; ?>" placeholder="邮箱" readonly>
                             <p class="help-block">登录邮箱不允许修改</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <label for="nickname" class="col-sm-3 control-label">昵称</label>
-                        <div class="col-sm-6">
-                            <input id="nickname" class="form-control" name="nickname" type="type" value="YDKD" placeholder="昵称">
-                            <p class="help-block">限制在 2-16 个字符</p>
                         </div>
                     </div>
                 </div>
@@ -86,7 +124,7 @@ $current_user = en_get_current_user();
                     <div class="row">
                         <label for="bio" class="col-sm-3 control-label">简介</label>
                         <div class="col-sm-6">
-                            <textarea id="bio" class="form-control" placeholder="Bio" cols="30" rows="6">Practice Perfect！</textarea>
+                            <textarea id="bio" class="form-control" cols="30" rows="6" name="bio" placeholder="<?php echo $_SESSION['bio']; ?>"><?php echo empty($_POST['bio']) ? '' : $_POST['bio']; ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -118,6 +156,20 @@ $current_user = en_get_current_user();
     <script src="/static/assets/vendors/font/iconfont.js"></script>
     <script>
         NProgress.done()
+    </script>
+    <script>
+        $(function() {
+            $('#bio').on('load', function() {
+                $value = $(this).attr('placeholder');
+
+                $.get('/admin/api/bio.php', {
+                    bio: $value
+                }, function(res) {
+                   $('#bio').attr('placeholder', res)
+                })
+
+            })
+        })
     </script>
 </body>
 

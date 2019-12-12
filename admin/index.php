@@ -1,6 +1,6 @@
 <?php
 //首先载入配置文件
-require '../function.php';
+require_once '../function.php';
 
 //先判断是否登录了，再进行后续
 en_get_current_user();
