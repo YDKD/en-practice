@@ -5,8 +5,34 @@ require_once '../function.php';
 //先判断是否登录了，再进行后续
 en_get_current_user();
 
-//拿到登录用户的数据
+// 主线任务，根据登录的不同级别，chart.js的显示不同
+// 实现，我把需要隐藏的用户级别放到一个数组中，根据拿到的用户级别的数据和数组中进行比较，若存在，则进行隐藏
+
+//先判断当前的界面传值是否存在
+$current_page = isset($current_page) ? $current_page : '';
+
+// 获取当前用户信息
 $current_user = en_get_current_user();
+
+// 获取当前用户级别
+$level = $current_user['level'];
+
+// 根据用户级别设置不同属性
+switch ($level) {
+    case '2':
+        $spe_hidden = 'hidden';
+        break;
+    case '3':
+        $author_hidden = 'hidden';
+        break;
+}
+
+// 获取当前的管理员，专家和作者的人数
+$admin = en_fetch_one("SELECT COUNT(LEVEL) AS num FROM users WHERE `level` = 1;")['num'];
+
+$specialist = en_fetch_one("SELECT COUNT(LEVEL) AS num FROM users WHERE `level` = 2;")['num'];
+
+$author = en_fetch_one("SELECT COUNT(LEVEL) AS num FROM users WHERE `level` = 3;")['num'];
 
 ?>
 <!DOCTYPE html>
@@ -44,10 +70,11 @@ $current_user = en_get_current_user();
             <div class="con-one">
                 <h1>写最好的文章，做最好的自己</h1>
                 <p>Thoughts, stories and ideas.</p>
-                <a href="#" class="btn btn-secondary btn-lg">写文章</a>
+                <a href="/admin/posts" class="btn btn-secondary btn-lg">写文章</a>
             </div>
+            <?php $per_level = array(2, 3); ?>
             <!-- 信息概览 -->
-            <div class="row">
+            <div class="row" <?php echo isset($author_hidden) ? 'id ="hidden"' : '';  ?> >
                 <div class="col-md-4">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -65,16 +92,17 @@ $current_user = en_get_current_user();
                     <canvas id="chart"></canvas>
                 </div>
             </div>
-            <div class="row people">
+           
+            <div class="row people" <?php echo in_array($level, $per_level) ? 'id="hidden"' : ''; ?>>
                 <div class="col-md-4">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">系统人员统计:</h3>
                         </div>
                         <ul class="list-group">
-                            <li class="list-group-item"><strong>10</strong>个管理员</li>
-                            <li class="list-group-item"><strong>6</strong>个专家</li>
-                            <li class="list-group-item"><strong>5</strong>个作者</li>
+                            <li class="list-group-item"><strong><?php echo $admin; ?></strong>个管理员</li>
+                            <li class="list-group-item"><strong><?php echo $specialist; ?></strong>个专家</li>
+                            <li class="list-group-item"><strong><?php echo $author; ?></strong>个作者</li>
                         </ul>
                     </div>
                 </div>
@@ -129,7 +157,7 @@ $current_user = en_get_current_user();
             type: 'doughnut',
             data: {
                 datasets: [{
-                    data: [10, 20, 30],
+                    data: [<?php echo $admin; ?>, <?php echo $specialist; ?>, <?php echo $author; ?>],
                     backgroundColor: [
                         '#20c997',
                         '#dc3545',

@@ -7,7 +7,7 @@ $current_user = en_get_current_user();
     <div class="logo flash animated">
         <h1>
             <img src="<?php echo $current_user['avatar']; ?>" alt="" height="50px">
-            <a href="">投稿系统</a>
+            <a href="/admin/index">投稿系统</a>
         </h1>
     </div>
     <div class="per-message text-center">

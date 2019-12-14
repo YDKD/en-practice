@@ -6,4 +6,5 @@ RewriteRule ^personal$ personal.php
 RewriteRule ^reset-pass$ reset-pass.php
 RewriteRule ^users-spe$ users-spe.php 
 RewriteRule ^users-author$ users-author.php
+RewriteRule ^posts$ posts.php
 ErrorDocument 404 /404.txt 
