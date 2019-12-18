@@ -4,17 +4,36 @@
 require_once '../function.php';
 
 // 判断当前用户是否登录
-$current_user = en_get_current_user();
+en_get_current_user();
 
-// 拿到表中的数据中专家的数据
-$current_spe = en_fetch_all("SELECT * FROM users WHERE `level` = '2'");
+// 目标：获取posts中的数据，并展示出来
+$current_posts = en_fetch_all("SELECT * FROM posts;");
 
-// 封装函数用户判断用户的状态
-function en_status($status) {
+// 判断文章当前的状态
+function posts_status($status)
+{
     $dict = array(
-        'actived' => '已注册'
+        'wait' => '待审核',
+        'pass' => '已通过',
+        'return' => '已退回'
     );
-    return isset($dict[$status]) ? $dict[$status] : '未知';
+    return isset($dict[$status]) ? $dict[$status] : '未知状态';
+}
+// 判断当前文章的分类
+function posts_category($category)
+{
+    $dict = array(
+        2 => '科技',
+        3 => '生活',
+        4 => '娱乐'
+    );
+    return isset($dict[$category]) ? $dict[$category] : '未知分类';
+}
+// 封装时间函数
+function cover_date($create)
+{
+    $timestamp = strtotime($create);
+    return date('Y年m月d日<b\r>H:i:s', $timestamp);
 }
 ?>
 
@@ -63,25 +82,25 @@ function en_status($status) {
                         <thead>
                             <tr>
                                 <th class="text-center" width="40"><input type="checkbox"></th>
-                                <th class="text-center" width="80">头像</th>
-                                <th>邮箱</th>
-                                <th>级别</th>
-                                <th>简介</th>
-                                <th>状态</th>
+                                <th>用户邮箱</th>
+                                <th>文章标题</th>
+                                <th>文章分类</th>
+                                <th>创建时间</th>
+                                <th>文章状态</th>
                                 <th class="text-center" width="100">操作</th>
                             </tr>
                         </thead>
                         <tbody class="user-spe text-center">
-                            <?php foreach ($current_spe as $item) : ?>
+                            <?php foreach ($current_posts as $item) : ?>
                                 <tr>
                                     <td class="text-center"><input type="checkbox" data-id="<?php echo $item['id']; ?>"></td>
-                                    <td class="text-center"><img class="avatar" src="<?php echo $item['avatar']; ?>"></td>
                                     <td><?php echo $item['email']; ?></td>
-                                    <td><?php echo $item['nickname'] ?></td>
-                                    <td><?php echo empty($item['bio']) ? '无' : $item['bio']; ?></td>
-                                    <td><?php echo en_status($item['status']); ?></td>
+                                    <td><?php echo $item['title']; ?></td>
+                                    <td><?php echo posts_category($item['category_id']); ?></td>
+                                    <td><?php echo cover_date($item['created']); ?></td>
+                                    <td><?php echo posts_status($item['status']); ?></td>
                                     <td class="text-center">
-                                        <a href="/admin/spe-delete?id=<?php echo $item['id']; ?>" class="btn btn-danger btn-sm">删除</a>
+                                        <a href="/admin/posts-all-delete?id=<?php echo $item['id']; ?>" class="btn btn-danger btn-sm">删除</a>
                                     </td>
                                 </tr>
                             <?php endforeach ?>
@@ -95,7 +114,7 @@ function en_status($status) {
         <!-- <?php include './inc/footer.php'; ?> -->
     </div>
     <!-- 给当前界面定义一个变量，用于后续点到那个界面做高亮显示 -->
-    <?php $current_page = 'users_spe'; ?>
+    <?php $current_page = 'posts-all'; ?>
     <!-- 侧边栏 -->
     <?php include './inc/slidebar.php'; ?>
 

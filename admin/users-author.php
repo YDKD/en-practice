@@ -4,68 +4,18 @@
 require_once '../function.php';
 
 // 判断当前用户是否登录
-en_get_current_user();
+$current_user = en_get_current_user();
 
-function reset_pass()
-{
-    // 表单验证三步， 
-    // 接收并数据
-    // 持久化
-    // 响应
+// 拿到表中的数据中专家的数据
+$current_spe = en_fetch_all("SELECT * FROM users WHERE `level` = '3'");
 
-    // 定义全局变量
-    global $message, $success;
-    // 判断信息
-    if (empty($_POST['mpass'])) {
-        $message = '原始密码不能为空';
-        return;
-    }
-
-    if (empty($_POST['newpass'])) {
-        $message = '新密码不能为空';
-        return;
-    }
-
-    if (empty($_POST['confirm'])) {
-        $message = '确认密码不能为空';
-        return;
-    }
-
-    // 拿到当前用户的信息
-    $current_user = en_get_current_user();
-
-    // 拿到当前用户的id值
-    $id = $current_user['id'];
-
-    // 拿到原始用户的密码,但是原始密码进行了加密的，要注意
-    $original_pass = $current_user['password'];
-    echo $current_user['password'];
-    //判断当前用户提交的原始密码正确
-    if (sha1($_POST['mpass']) != $original_pass) {
-        $message = '原始密码输入错误';
-        return;
-    }
-    // 判断表单提交的数据两次密码是否一致
-    if ($_POST['newpass'] != $_POST['confirm']) {
-        $message = '两次密码输入不一致';
-        return;
-    }
-
-    // 到此，表单验证结束，接收用户传来的数据，不要忘记数据加密
-    $result = $_POST['newpass'];
-    $newpass = sha1($result);
-    // 更新数据
-
-    $row = en_excute("UPDATE users SET `password` = '{$newpass}' WHERE id = '{$id}';");
-    $success = $row > 0;
-    $message = $row > 0 ? '密码修改成功' : '密码修改失败';
+// 封装函数用户判断用户的状态
+function en_status($status) {
+    $dict = array(
+        'actived' => '已注册'
+    );
+    return isset($dict[$status]) ? $dict[$status] : '未知';
 }
-
-// 判断当前用户提交信息的方式
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    reset_pass();
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -103,7 +53,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php include 'inc/navbar.php' ?>
         <!-- 中间显示区 -->
         <div class="container-fluid">
-           
+            <div class="row posts">
+                <div class="col-sm-12">
+                    <div class="page-action">
+                        <!-- show when multiple checked -->
+                        <a id="btn_delete" class="btn btn-danger btn-sm" href="/admin/author-delete" style="display: none; margin-bottom: 8px;">批量删除</a>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center" width="40"><input type="checkbox"></th>
+                                <th class="text-center" width="80">头像</th>
+                                <th>邮箱</th>
+                                <th>级别</th>
+                                <th>简介</th>
+                                <th>状态</th>
+                                <th class="text-center" width="100">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="user-spe text-center">
+                            <?php foreach ($current_spe as $item) : ?>
+                                <tr>
+                                    <td class="text-center"><input type="checkbox" data-id="<?php echo $item['id']; ?>"></td>
+                                    <td class="text-center"><img class="avatar" src="<?php echo $item['avatar']; ?>"></td>
+                                    <td><?php echo $item['email']; ?></td>
+                                    <td><?php echo $item['nickname'] ?></td>
+                                    <td><?php echo empty($item['bio']) ? '无' : $item['bio']; ?></td>
+                                    <td><?php echo en_status($item['status']); ?></td>
+                                    <td class="text-center">
+                                        <a href="/admin/author-delete?id=<?php echo $item['id']; ?>" class="btn btn-danger btn-sm">删除</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <!-- 底部版权 -->
@@ -120,6 +105,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="//at.alicdn.com/t/font_1549825_2clf5pue9ge.js"></script>
     <script>
         NProgress.done()
+    </script>
+    <script>
+        $(function($) {
+            // 在表格的任意一个 checkbox 选中状态变化时
+            var $tobyCheckbox = $('tbody input');
+            var $btn_delete = $('#btn_delete');
+
+            // 把被选中的选项框的id记下来，然后再后面的批量删除中可以用到，
+            // tips
+            // 1.还要特别注意变量的本地化，一些结果可以通过定义一个变量来接收（变量的重复使用时用到）
+            var allCheckeds = [];
+            $tobyCheckbox.on('change', function() {
+                var id = $(this).data('id');
+                if ($(this).prop('checked')) {
+                    allCheckeds.includes(id) === -1 || allCheckeds.push(id)
+                } else {
+                    allCheckeds.splice(allCheckeds.indexOf(id), 1);
+                }
+
+                // 可以通过数组的长度是否为空来判断批量按钮的显示和隐藏
+                allCheckeds.length ? $btn_delete.fadeIn() : $btn_delete.fadeOut();
+                $btn_delete.prop('search', '?id=' + allCheckeds)
+            })
+
+            $('thead input').on('change', function() {
+                var cke = $(this).prop('checked')
+                $tobyCheckbox.prop('checked', cke).change()
+                // console.log(111)
+            })
+        })
     </script>
 </body>
 

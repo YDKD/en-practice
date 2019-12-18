@@ -1,4 +1,12 @@
 <?php
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: YDKD
+ * @Date: 2019-12-02 09:08:10
+ * @LastEditors  : YDKD
+ * @LastEditTime : 2019-12-18 15:59:08
+ */
 
 /**数据库的配置连接的信息 */
 // 配置连接的数据库的主机

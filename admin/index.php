@@ -34,6 +34,14 @@ $specialist = en_fetch_one("SELECT COUNT(LEVEL) AS num FROM users WHERE `level` 
 
 $author = en_fetch_one("SELECT COUNT(LEVEL) AS num FROM users WHERE `level` = 3;")['num'];
 
+// 获取不同状态文章的数目
+// 待审文章
+$posts_wait = en_fetch_one("SELECT COUNT(STATUS) AS num FROM posts WHERE `status` = 'wait';")['num'];
+// 通过文章
+$posts_pass = en_fetch_one("SELECT COUNT(STATUS) AS num FROM posts WHERE `status` = 'pass';")['num'];
+// 已退文章
+$posts_return = en_fetch_one("SELECT COUNT(STATUS) AS num FROM posts WHERE `status` = 'return';")['num'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,9 +89,9 @@ $author = en_fetch_one("SELECT COUNT(LEVEL) AS num FROM users WHERE `level` = 3;
                             <h3 class="panel-title">系统稿件统计:</h3>
                         </div>
                         <ul class="list-group">
-                            <li class="list-group-item"><strong>10</strong>个待审稿件</li>
-                            <li class="list-group-item"><strong>6</strong>个已审稿件</li>
-                            <li class="list-group-item"><strong>5</strong>个已退稿件</li>
+                            <li class="list-group-item"><strong><?php echo  $posts_wait; ?></strong>个待审稿件</li>
+                            <li class="list-group-item"><strong><?php echo $posts_pass; ?></strong>个已审稿件</li>
+                            <li class="list-group-item"><strong><?php echo $posts_return ?></strong>个已退稿件</li>
                         </ul>
                     </div>
                 </div>
@@ -136,7 +144,7 @@ $author = en_fetch_one("SELECT COUNT(LEVEL) AS num FROM users WHERE `level` = 3;
             type: 'doughnut',
             data: {
                 datasets: [{
-                    data: [10, 20, 30],
+                    data: [<?php echo  $posts_wait; ?>, <?php echo $posts_pass; ?>, <?php echo $posts_return ?>],
                     backgroundColor: [
                         '#6610f2',
                         '#ffc107',

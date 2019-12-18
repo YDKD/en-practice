@@ -33,6 +33,7 @@ switch ($level) {
                     基本信息
                 </a>
             </li>
+            <!-- 创建人员数组 -->
             <?php $personals = array('users_spe', 'users_author'); ?>
             <?php $per_level = array(2, 3); ?>
             <li <?php echo in_array($current_page, $personals) ? 'class="active"' : '' ?> <?php echo in_array($level, $per_level) ? 'id="hidden"' : ''; ?> >
@@ -43,33 +44,35 @@ switch ($level) {
                     人员管理
                 </a>
                 <ul id="person-manger" class="collapse<?php echo in_array($current_page, $personals) ? ' show' : ''; ?>">
-                    <li><a href="/admin/users-spe">专家管理</a></li>
-                    <li><a href="/admin/users-author">作者管理</a></li>
+                    <li <?php echo $current_page=='users_spe' ? 'class="active"' : ''; ?>><a href="/admin/users-spe">专家管理</a></li>
+                    <li <?php echo $current_page=='users_author' ? 'class="active"' : ''; ?>><a href="/admin/users-author">作者管理</a></li>
                 </ul>
             </li>
-            <li <?php echo isset($author_hidden) ? $author_hidden : ''; ?> >
-                <a href="#manger-posts" class="collapsed" data-toggle="collapse">
+            <!-- 创建文章数组 -->
+            <?php $en_posts = array('posts-all', 'posts-pass', 'posts-return', 'posts-wait'); ?>
+            <li <?php echo isset($author_hidden) ? "id = $author_hidden" : ''; ?>  <?php echo in_array($current_page, $en_posts) ? 'class="active"' : '' ?>>
+                <a href="#manger-posts" <?php echo in_array($current_page, $en_posts) ? '' : 'class="collapsed"'; ?> data-toggle="collapse">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-gaojian"></use>
                     </svg>
                     稿件管理
                 </a>
-                <ul id="manger-posts" class="collapse">
-                    <li <?php echo in_array($level, $per_level) ? 'id="hidden"' : ''; ?>><a href="#">已除稿件</a></li>
-                    <li><a href="#">待审稿件</a></li>
-                    <li><a href="#">已审稿件</a></li>
-                    <li><a href="#">已退稿件</a></li>
+                <ul id="manger-posts" class="collapse<?php echo in_array($current_page, $en_posts) ? ' show' : ''; ?>">
+                    <li <?php echo in_array($level, $per_level) ? 'id="hidden"' : ''; ?> <?php echo $current_page=='posts-all' ? 'class="active"' : ''; ?>><a href="/admin/posts-all">全部稿件</a></li>
+                    <li <?php echo $current_page=='posts-wait' ? 'class="active"' : ''; ?>><a href="/admin/posts-wait">待审稿件</a></li>
+                    <li <?php echo $current_page=='posts-pass' ? 'class="active"' : ''; ?>><a href="/admin/posts-pass">已审稿件</a></li>
+                    <li <?php echo $current_page=='posts-return' ? 'class="active"' : ''; ?>><a href="/admin/posts-return">已退稿件</a></li>
                 </ul>
             </li>
-            <li class="">
-                <a href="#system-manger" class="collapsed" data-toggle="collapse">
+            <li <?php echo $current_page == 'reset-pass' ? 'class="active"' : ''; ?>>
+                <a href="#system-manger" <?php echo $current_page == 'reset-pass' ? 'class="collapsed"' : ''; ?> data-toggle="collapse">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-shezhi"></use>
                     </svg>
                     系统管理
                 </a>
-                <ul id="system-manger" class="collapse">
-                    <li><a href="/admin/reset-pass">修改密码</a></li>
+                <ul id="system-manger" class="collapse<?php echo $current_page == 'reset-pass' ? ' show' : ''; ?>">
+                    <li <?php echo $current_page=='reset-pass' ? 'class="active"' : ''; ?>><a href="/admin/reset-pass">修改密码</a></li>
                 </ul>
             </li>
         </ul>
