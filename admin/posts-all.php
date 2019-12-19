@@ -9,32 +9,7 @@ en_get_current_user();
 // 目标：获取posts中的数据，并展示出来
 $current_posts = en_fetch_all("SELECT * FROM posts;");
 
-// 判断文章当前的状态
-function posts_status($status)
-{
-    $dict = array(
-        'wait' => '待审核',
-        'pass' => '已通过',
-        'return' => '已退回'
-    );
-    return isset($dict[$status]) ? $dict[$status] : '未知状态';
-}
-// 判断当前文章的分类
-function posts_category($category)
-{
-    $dict = array(
-        2 => '科技',
-        3 => '生活',
-        4 => '娱乐'
-    );
-    return isset($dict[$category]) ? $dict[$category] : '未知分类';
-}
-// 封装时间函数
-function cover_date($create)
-{
-    $timestamp = strtotime($create);
-    return date('Y年m月d日<b\r>H:i:s', $timestamp);
-}
+
 ?>
 
 <!DOCTYPE html>

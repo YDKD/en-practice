@@ -124,21 +124,58 @@ function level_judge($level)
 
 // 封装一个session信息更新函数
 
-function update_session($id) {
+function update_session($id)
+{
     $conn = mysqli_connect(EP_HOST, EP_USER, EP_PASS, EP_NAME);
-    if(!$conn) {
+    if (!$conn) {
         exit('数据库连接失败');
     }
 
     mysqli_set_charset($conn, 'utf8');
-    
+
     $query = mysqli_query($conn, "SELECT * FROM users WHERE id = '{$id}'");
 
-    if(!$query) {
+    if (!$query) {
         exit('查询失败');
     }
 
     $user = mysqli_fetch_assoc($query);
 
     $_SESSION['current_login_user'] = $user;
+}
+
+// 封装函数，判断文章当前的状态
+function posts_status($status)
+{
+    $dict = array(
+        'wait' => '待审核',
+        'pass' => '已通过',
+        'return' => '已退回'
+    );
+    return isset($dict[$status]) ? $dict[$status] : '未知状态';
+}
+// 封装函数，判断当前文章的分类
+function posts_category($category)
+{
+    $dict = array(
+        2 => '科技',
+        3 => '生活',
+        4 => '娱乐'
+    );
+    return isset($dict[$category]) ? $dict[$category] : '未知分类';
+}
+// 封装时间函数
+function cover_date($create)
+{
+    $timestamp = strtotime($create);
+    return date('Y年m月d日<b\r>H:i:s', $timestamp);
+}
+// 封装人员信息判断
+function per_judge()
+{
+    $dict =  array(
+        1 => '管理员',
+        2 => '作者',
+        3 => '专家'
+    );
 }

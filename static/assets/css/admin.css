@@ -548,3 +548,21 @@ pre code {
     padding: 8px;
     line-height: 1.42;
 }
+
+#operate .btn {
+    padding: 1px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+
+.per .form-group {
+    width: 50%;
+    transform: translateX(50%);
+}
+
+.per .btn {
+    font-size: 14px;
+    margin: 0 auto;
+    background-color: #9ed0fd;
+}

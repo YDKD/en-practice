@@ -8,10 +8,13 @@ RewriteRule ^posts$ posts.php
 RewriteRule ^posts-all$ posts-all.php 
 RewriteRule ^posts-all-delete$ posts-all-delete.php 
 RewriteRule ^posts-pass$ posts-pass.php 
+RewriteRule ^posts-p$ posts-p.php 
+RewriteRule ^posts-r$ posts-r.php
 RewriteRule ^posts-return$ posts-return.php 
 RewriteRule ^posts-wait$ posts-wait.php 
 RewriteRule ^users-spe$ users-spe.php  
 RewriteRule ^spe-delete$ spe-delete.php 
 RewriteRule ^users-author$ users-author.php 
 RewriteRule ^author-delete$ author-delete.php
+RewriteRule ^personal-add$ personal-add.php
 ErrorDocument 404 /404.txt 

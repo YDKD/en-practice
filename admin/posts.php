@@ -12,7 +12,7 @@ function posts_add()
 {
     // 定义全局变量
     global $message, $success, $content;
-    // 那到用户信息
+    // 拿到用户信息
     $currnet_user = en_get_current_user();
     if (empty($_POST['title'])) {
         $message = '标题不能为空';

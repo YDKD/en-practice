@@ -1,17 +1,13 @@
 <?php
-
 // 载入配置文件
 require_once '../function.php';
 
 // 判断当前用户是否登录
 en_get_current_user();
 
+// 目标：获取posts中的数据，并展示出来
+$current_posts = en_fetch_all("SELECT * FROM posts WHERE `status` = 'wait';");
 
-
-// 判断当前用户提交信息的方式
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    
-}
 
 ?>
 
@@ -50,7 +46,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php include 'inc/navbar.php' ?>
         <!-- 中间显示区 -->
         <div class="container-fluid">
-           
+            <div class="row posts">
+                <div class="col-sm-12">
+                    <div class="page-action">
+                        <!-- show when multiple checked -->
+                        <a id="btn_delete" class="btn btn-danger btn-sm" href="/admin/spe-delete" style="display: none; margin-bottom: 8px;">批量删除</a>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center" width="40"><input type="checkbox"></th>
+                                <th>用户邮箱</th>
+                                <th>文章标题</th>
+                                <th>文章分类</th>
+                                <th>创建时间</th>
+                                <th>文章状态</th>
+                                <th class="text-center" width="100">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="user-spe text-center">
+                            <?php foreach ($current_posts as $item) : ?>
+                                <tr class="con">
+                                    <td class="text-center"><input type="checkbox" data-id="<?php echo $item['id']; ?>"></td>
+                                    <td><?php echo $item['email']; ?></td>
+                                    <td><?php echo $item['title']; ?></td>
+                                    <td><?php echo posts_category($item['category_id']); ?></td>
+                                    <td><?php echo cover_date($item['created']); ?></td>
+                                    <td><?php echo posts_status($item['status']); ?></td>
+                                    <td class="text-center" id="operate">
+                                        <a href="/admin/posts-p?id=<?php echo $item['id']; ?>" class="btn btn-success btn-sm">通过</a>
+                                        <a href="/admin/posts-r?id=<?php echo $item['id']; ?>" class="btn btn-secondary btn-sm">退回</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <!-- 底部版权 -->
