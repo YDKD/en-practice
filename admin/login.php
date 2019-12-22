@@ -9,12 +9,12 @@ session_start();
 // 接收并校验数据
 // 持久化
 // 响应
+// echo $_SESSION['result'], $_SESSION['rand'];
 function login()
 {
 
     //定义全局错误变量和成功变量
     global $message;
-    // global $success;
 
     if (empty($_POST['email'])) {
         $message = '邮箱为空';
@@ -24,7 +24,6 @@ function login()
         $message = '密码为空';
         return;
     }
-
     //邮箱密码都进行输入，可以进行数据校验
     //接收客户端传过来的数据
     $email = $_POST['email'];
@@ -37,7 +36,7 @@ function login()
     }
     // 设置数据编码
     mysqli_set_charset($conn, 'utf8');
-    
+
     $query = mysqli_query($conn, "SELECT * FROM users WHERE email = '{$email}' limit 1;");
     if (!$query) {
         $message = '登录失败，请重试';
@@ -51,7 +50,13 @@ function login()
         return;
     }
     if ($user['password'] != sha1($password)) {
-        $message = '您还不是会员，请注册！';
+        $message = '密码错误请重新输入！';
+        return;
+    }
+
+    // 验证码验证
+    if($_SESSION['result'] != $_SESSION['rand']) {
+        $message = '验证码输入错误';
         return;
     }
 
@@ -91,6 +96,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['action']) && $_GET['acti
     <link rel="stylesheet" href="/static/assets/css/bg.css">
     <!-- 引入网站ico -->
     <link rel="icon" href="/static/uploads/favicon.ico" type="image/x-icon" />
+    <script src="https://cdn.bootcss.com/jquery/1.12.3/jquery.min.js"></script>
+    <style>
+        #verify {
+            height: 34px;
+            vertical-align: top;
+            font-size: 16px;
+            border-radius: 3px;
+            border: none;
+        }
+
+        #code_img {
+            width: 100px;
+            height: 34px;
+            cursor: pointer;
+            vertical-align: top;
+            border-radius: 3px;
+        }
+    </style>
 </head>
 
 <body>
@@ -119,8 +142,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['action']) && $_GET['acti
                 <label for="password" class="sr-only">密码</label>
                 <input id="password" name="password" type="password" class="form-control" placeholder="密码">
             </div>
-            <button class="btn btn-primary btn-block" href="index.html">登 录</button>
+            <div class="form-group">
+                <p>
+                    <input type="text" class="topAlign" id="verify" name="verify">
+                    <canvas width="100" height="40" id="verifyCanvas"></canvas>
+                    <img id="code_img">
+                </p>
+            </div>
+            <button id="submit" class="btn btn-primary btn-block" href="index.html">登 录</button>
         </form>
+
         <div class="sign-up">
             <span>没有账号？ <strong><a href="sign-up" class="blue-text">现在注册!</a></strong></span>
         </div>
@@ -136,6 +167,107 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['action']) && $_GET['acti
     <script src="/static/assets/vendors/jquery/jquery.js"></script>
     <!-- 引入canvas背景 -->
     <script src="/static/assets/vendors/canvas/bg.js"></script>
+
+    <script>
+        var nums = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+            'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+            'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+            'y', 'z'
+        ];
+        var colors = []
+        drawCode();
+        // 绘制验证码
+        function drawCode() {
+            var canvas = document.getElementById("verifyCanvas"); //获取HTML端画布
+            var context = canvas.getContext("2d"); //获取画布2D上下文
+            context.fillStyle = "cornflowerblue"; //画布填充色
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            // 创建渐变
+            var gradient = context.createLinearGradient(0, 0, canvas.width, 0);
+            gradient.addColorStop("0", "magenta");
+            gradient.addColorStop("0.5", "blue");
+            gradient.addColorStop("1.0", "red");
+            //清空画布
+            context.fillStyle = gradient; //设置字体颜色
+            context.font = "25px Arial"; //设置字体
+            var rand = new Array();
+            var x = new Array();
+            var y = new Array();
+            for (var i = 0; i < 4; i++) {
+                rand[i] = nums[Math.floor(Math.random() * nums.length)]
+                x[i] = i * 16 + 10;
+                y[i] = Math.random() * 20 + 20;
+                context.fillText(rand[i], x[i], y[i]);
+            }
+            // console.log(rand);
+            //画3条随机线
+            for (var i = 0; i < 3; i++) {
+                drawline(canvas, context);
+            }
+
+            // 画30个随机点
+            for (var i = 0; i < 30; i++) {
+                drawDot(canvas, context);
+            }
+            convertCanvasToImage(canvas)
+
+            // // 图片中的文字
+            // var newRand = rand.join('').toUpperCase();
+            // console.log(newRand);
+
+            $('#verify').on("blur", function() {
+                //获取当前文本框中的值
+                $value = $(this).val().toUpperCase();
+                $newRand = rand.join('').toUpperCase();
+                console.log($newRand);
+                console.log($value);
+                $.get('/admin/test.php', {
+                    source: $value,
+                    rand: $newRand
+                }, function(res) {
+                    //希望这个 res 对应的是头像的地址
+
+                    if (!res) return;
+                    alert(res);
+                })
+
+            })
+        }
+
+        // 随机线
+        function drawline(canvas, context) {
+            context.moveTo(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height)); //随机线的起点x坐标是画布x坐标0位置，y坐标是画布高度的随机数
+            context.lineTo(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height)); //随机线的终点x坐标是画布宽度，y坐标是画布高度的随机数
+            context.lineWidth = 0.5; //随机线宽
+            context.strokeStyle = 'rgba(50,50,50,0.3)'; //随机线描边属性
+            context.stroke(); //描边，即起点描到终点
+        }
+        // 随机点(所谓画点其实就是画1px像素的线，方法不再赘述)
+        function drawDot(canvas, context) {
+            var px = Math.floor(Math.random() * canvas.width);
+            var py = Math.floor(Math.random() * canvas.height);
+            context.moveTo(px, py);
+            context.lineTo(px + 1, py + 1);
+            context.lineWidth = 0.2;
+            context.stroke();
+
+        }
+        // 绘制图片
+        function convertCanvasToImage(canvas) {
+            document.getElementById("verifyCanvas").style.display = "none";
+            var image = document.getElementById("code_img");
+            image.src = canvas.toDataURL("image/png");
+            return image;
+        }
+
+        // 点击图片刷新
+        document.getElementById('code_img').onclick = function() {
+            $('#verifyCanvas').remove();
+            $('#verify').after('<canvas width="100" height="40" id="verifyCanvas"></canvas>')
+            drawCode();
+        }
+    </script>
 
     <script>
         // 用一个回调函数，在DOM全部加载完毕之后，在执行

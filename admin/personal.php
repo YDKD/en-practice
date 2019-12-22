@@ -5,8 +5,6 @@ require_once '../function.php';
 //先判断是否登录了，再进行后续
 en_get_current_user();
 
-session_start();
-
 function personal()
 {
     // 定义全局变量
@@ -18,13 +16,39 @@ function personal()
     //接收用户ID，为了后续的更新操作
     $id = $current_user['id'];
 
+    // 头像更改
+    // 接收文件传过来的数据
+    // if(empty($_FILES['avatar'])) {
+    //     $message = '请正确提交文件';
+    //     return;
+    // }
+
+    // 默认是存在头像的，所以如果需要修改头像，直接接收头像地址
+    $avatar_source = $_FILES['avatar'];
+    // 判断用户是否选择了文件
+    if($avatar_source === UPLOAD_ERR_OK) {
+        $message = '请选择头像地址';
+        return;
+    }
+    
+    $houzhui = pathinfo($avatar_source['name']);
+    // 上传成功，接收文件
+    $target = '../static/uploads/' . uniqid() . '.' . $houzhui['extension'];
+    if(!move_uploaded_file($avatar_source['tmp_name'], $target)) {
+        $message = '头像更新失败';
+        return;
+    }
+
+    $result = substr($target, 2);
+
     //接收用户传过来的级别和简介
     $bio =  empty($_POST['bio']) ? $current_user['bio'] : $_POST['bio'];
 
-    // 同步数据
-    $current_user['bio'] = $bio;
+    $row = en_excute("UPDATE users SET  bio = '{$bio}', avatar = '{$result}' WHERE id = '{$id}'; ");
+
+    // 更新用户信息因为我的混编中的，始终拿到的是初始的session中的值，必须进行更新，把更新后的信息同步到session中，才可以在界面更新新。
+    update_session($id);
     
-    $row = en_excute("UPDATE users SET  bio = '{$bio}' WHERE id = '{$id}'; ");
     $success = $row > 0;
     $message = $row <= 0 ? '更新失败' : '更新成功';
 
@@ -43,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>投稿系统-修改密码</title>
+    <title>投稿系统-个人中心</title>
     <!-- 引入Bootstrap.css -->
     <link rel="stylesheet" href="/static/assets/vendors/boostrap/css/bootstrap.css">
     <!-- 引入动画css -->
@@ -75,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="page-title text-center">
                 <h3>我的个人资料</h3>
             </div>
-            <form action="/admin/personal" class="message" method="POST">
+            <form action="/admin/personal" class="message" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-3"></div>
@@ -101,8 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label class="col-sm-3 control-label">头像</label>
                         <div class="col-sm-6">
                             <label class="form-image">
-                                <input id="avatar" type="file">
-                                <img src="<?php echo $current_user['avatar']; ?>">
+                                <input id="avatar" type="file" name="avatar">
+                                <img src="<?php echo $current_user['avatar']; ?>" width="150" height="150">
                                 <i class="mask fa fa-upload"></i>
                             </label>
                         </div>

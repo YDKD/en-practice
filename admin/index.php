@@ -78,7 +78,8 @@ $posts_return = en_fetch_one("SELECT COUNT(STATUS) AS num FROM posts WHERE `stat
             <div class="con-one">
                 <h1>写最好的文章，做最好的自己</h1>
                 <p>Thoughts, stories and ideas.</p>
-                <a href="/admin/posts" class="btn btn-secondary btn-lg">写文章</a>
+                <a href="/admin/online-write" class="btn btn-secondary btn-lg">在线编写</a>
+                <a href="/admin/online-sub" class="btn btn-secondary btn-lg">在线投稿</a>
             </div>
             <?php $per_level = array(2, 3); ?>
             <!-- 信息概览 -->

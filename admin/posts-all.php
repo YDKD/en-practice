@@ -18,7 +18,7 @@ $current_posts = en_fetch_all("SELECT * FROM posts;");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>投稿系统-修改密码</title>
+    <title>投稿系统-所有文章</title>
     <!-- 引入Bootstrap.css -->
     <link rel="stylesheet" href="/static/assets/vendors/boostrap/css/bootstrap.css">
     <!-- 引入动画css -->

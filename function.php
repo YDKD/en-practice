@@ -148,9 +148,9 @@ function update_session($id)
 function posts_status($status)
 {
     $dict = array(
-        'wait' => '待审核',
-        'pass' => '已通过',
-        'return' => '已退回'
+        'wait' => '<font color="#007bff">待审核</font>',
+        'pass' => '<font color="green">已通过</font>',
+        'return' => '<font color="red">已退回</font>'
     );
     return isset($dict[$status]) ? $dict[$status] : '未知状态';
 }

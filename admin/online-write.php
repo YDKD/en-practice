@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>投稿系统-修改密码</title>
+    <title>投稿系统-在线投稿</title>
     <!-- 引入Bootstrap.css -->
     <link rel="stylesheet" href="/static/assets/vendors/boostrap/css/bootstrap.css">
     <!-- 引入进度条css -->
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="form-group">
                         <label for="title">标题</label>
-                        <input id="title" class="form-control input-lg" name="title" type="text" placeholder="文章标题" value="<?php echo empty($_POST['title'])  ? '' : $_POST['title']; ?>">
+                        <input id="title" class="form-control input-lg" name="title" type="text" placeholder="文章标题" value="<?php echo empty($_POST['title'])  ? '' : $_POST['title']; ?>" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <div id="div1">

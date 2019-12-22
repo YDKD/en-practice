@@ -4,7 +4,8 @@ RewriteRule ^index$ index.php
 RewriteRule ^sign-up$ sign-up.php 
 RewriteRule ^personal$ personal.php 
 RewriteRule ^reset-pass$ reset-pass.php 
-RewriteRule ^posts$ posts.php 
+RewriteRule ^online-write$ online-write.php 
+RewriteRule ^online-sub$ online-sub.php 
 RewriteRule ^posts-all$ posts-all.php 
 RewriteRule ^posts-all-delete$ posts-all-delete.php 
 RewriteRule ^posts-pass$ posts-pass.php 
