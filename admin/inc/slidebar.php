@@ -4,8 +4,8 @@
  * @version: 
  * @Author: sueRimn
  * @Date: 2019-12-05 22:52:39
- * @LastEditors  : sueRimn
- * @LastEditTime : 2019-12-19 14:11:35
+ * @LastEditors  : YDKD
+ * @LastEditTime : 2019-12-25 22:58:11
  */
 
 // 主线任务，根据登录的不同级别，侧边栏的功能显示不同
@@ -59,7 +59,7 @@ switch ($level) {
             </li>
             <!-- 创建文章数组 -->
             <?php $en_posts = array('posts-all', 'posts-pass', 'posts-return', 'posts-wait'); ?>
-            <li <?php echo isset($author_hidden) ? "id = $author_hidden" : ''; ?>  <?php echo in_array($current_page, $en_posts) ? 'class="active"' : '' ?>>
+            <li   <?php echo in_array($current_page, $en_posts) ? 'class="active"' : '' ?>>
                 <a href="#manger-posts" <?php echo in_array($current_page, $en_posts) ? '' : 'class="collapsed"'; ?> data-toggle="collapse">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-gaojian"></use>

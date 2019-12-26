@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label id="username" class="col-sm-2 control-label">原始密码:</label>
                                 <div class="field col-sm-10">
                                     <input type="password" class="form-control" id="mpass" name="mpass" size="50" placeholder="请输入原始密码" data-validate="required:请输入原始密码" />
-                                </div>
+                                </div> 
                             </div>
                         </div>
                         <div class="form-group put clearfix">

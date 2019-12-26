@@ -4,10 +4,14 @@
 require_once '../function.php';
 
 // 判断当前用户是否登录
-en_get_current_user();
-
+$current_user = en_get_current_user();
+// 获取用户邮箱
+$email = $current_user['email'];
+// 获取用户级别
+$level = $current_user['level'];
 // 目标：获取posts中的数据，并展示出来
-$current_posts = en_fetch_all("SELECT * FROM posts WHERE `status` = 'pass';");
+$posts = en_fetch_all("SELECT * FROM posts WHERE `status` = 'pass';");
+$current_pass_posts = en_fetch_all("SELECT * FROM posts WHERE email = '{$email}' AND `status` = 'pass';");
 
 
 
@@ -67,20 +71,35 @@ $current_posts = en_fetch_all("SELECT * FROM posts WHERE `status` = 'pass';");
                             </tr>
                         </thead>
                         <tbody class="user-spe text-center">
-                            <?php foreach ($current_posts as $item) : ?>
+                            <?php if (($level == 1 || $level == 2) && is_array($posts)) : ?>
+                                <?php foreach ($posts as $item) : ?>
+                                    <tr class="con">
+                                        <td><?php echo $item['email']; ?></td>
+                                        <td><?php echo $item['title']; ?></td>
+                                        <td><?php echo posts_category($item['category_id']); ?></td>
+                                        <td><?php echo $item['created']; ?></td>
+                                        <td><?php echo posts_status($item['status']); ?></td>
+                                    </tr>
+                                <?php endforeach ?>
+                            <?php elseif (is_array($current_pass_posts)) : ?>
+                                <?php foreach ($current_pass_posts as $item) : ?>
+                                    <tr class="con">
+                                        <td><?php echo $item['email']; ?></td>
+                                        <td><?php echo $item['title']; ?></td>
+                                        <td><?php echo posts_category($item['category_id']); ?></td>
+                                        <td><?php echo $item['created']; ?></td>
+                                        <td><?php echo posts_status($item['status']); ?></td>
+                                    </tr>
+                                <?php endforeach ?>
+                            <?php else : ?>
                                 <tr class="con">
-                                    <!-- <td class="text-center"><input type="checkbox" data-id="<?php echo $item['id']; ?>"></td> -->
-                                    <td><?php echo $item['email']; ?></td>
-                                    <td><?php echo $item['title']; ?></td>
-                                    <td><?php echo posts_category($item['category_id']); ?></td>
-                                    <td><?php echo cover_date($item['created']); ?></td>
-                                    <td><?php echo posts_status($item['status']); ?></td>
-                                    <!-- <td class="text-center" id="operate">
-                                        <a href="/admin/posts-p?id=<?php echo $item['id']; ?>" class="btn btn-success btn-sm">通过</a>
-                                        <a href="/admin/posts-r?id=<?php echo $item['id']; ?>" class="btn btn-secondary btn-sm">退回</a>
-                                    </td> -->
+                                    <td>无</td>
+                                    <td>无</td>
+                                    <td>无</td>
+                                    <td>无</td>
+                                    <td>无</td>
                                 </tr>
-                            <?php endforeach ?>
+                            <?php endif ?>
                         </tbody>
                     </table>
                 </div>

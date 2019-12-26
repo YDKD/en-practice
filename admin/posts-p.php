@@ -1,11 +1,11 @@
 <?php
 /*
- * @Descripttion: 
+ * @Descripttion: 文章通过操作
  * @version: 
  * @Author: sueRimn
  * @Date: 2019-12-19 10:13:05
- * @LastEditors  : sueRimn
- * @LastEditTime : 2019-12-19 10:16:34
+ * @LastEditors  : YDKD
+ * @LastEditTime : 2019-12-26 15:29:01
  */
 // 载入配置文件
 require_once '../function.php';

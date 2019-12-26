@@ -8,6 +8,9 @@ require_once '../function.php';
 // 判断当前用户是否登录,接收用户信息
 en_get_current_user();
 
+// 设置时区
+date_default_timezone_set('PRC');
+
 function posts_add()
 {
     // 定义全局变量
@@ -22,8 +25,8 @@ function posts_add()
         $message = '内容不能为空';
         return;
     }
-    if (empty($_POST['category'])) {
-        $message = '请选择分类';
+    if ($_POST['category'] == 1) {
+        $message = '请选择文章分类';
         return;
     }
     if (empty($_POST['created'])) {
@@ -37,12 +40,18 @@ function posts_add()
     $category = $_POST['category'];
     $created = $_POST['created'];
     $status = $_POST['status'];
-    // 加密文本内容
-    $re_content = sha1($content);
+
+    // 创建文件夹
+    $myfile = fopen("../static/uploads/posts/$title" . '.txt', "w") or die("Unable to open file!");
+    // 文本写入
+    fwrite($myfile, $content);
+    // 关闭文件
+    fclose($myfile);
+
     // 接收用户的邮箱
     $email = $currnet_user['email'];
     // 存储数据
-    $row = en_excute("INSERT INTO posts VALUES(NULL, '{$email}','{$title}', '{$re_content}', {$category}, '{$created}', '{$status}')");
+    $row = en_excute("INSERT INTO posts VALUES(NULL, '{$email}','{$title}', {$category}, '{$created}', '{$status}')");
     $success = $row > 0;
     $message = $row <= 0 ? "投稿失败" : "投稿成功";
 }
@@ -61,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>投稿系统-在线投稿</title>
+    <title>投稿系统-在线编写</title>
     <!-- 引入Bootstrap.css -->
     <link rel="stylesheet" href="/static/assets/vendors/boostrap/css/bootstrap.css">
     <!-- 引入进度条css -->
@@ -85,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php include 'inc/navbar.php' ?>
         <!-- 中间显示区 -->
         <div class="container-fluid">
-            <form class="row" action="/admin/posts" method="post">
+            <form class="row" action="/admin/online-write" method="post">
                 <div class="col-md-9">
                     <div class="form-group">
 
@@ -124,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="form-group">
                         <label for="created">发布时间</label>
-                        <input id="created" class="form-control" name="created" type="datetime-local">
+                        <input id="created" class="form-control" name="created" type="text" value="<?php echo date('Y年m月d日 H:i:s', time())?>" readonly>
                     </div>
                     <div class="form-group">
                         <label for="status">状态</label>

@@ -25,8 +25,13 @@ function personal()
 
     // 默认是存在头像的，所以如果需要修改头像，直接接收头像地址
     $avatar_source = $_FILES['avatar'];
+    var_dump($avatar_source);
+    if ($avatar_source['tmp_name']=='') {
+        $message = '请选择头像地址';
+        return;
+    }
     // 判断用户是否选择了文件
-    if($avatar_source === UPLOAD_ERR_OK) {
+    if ($avatar_source === UPLOAD_ERR_OK) {
         $message = '请选择头像地址';
         return;
     }
@@ -34,7 +39,7 @@ function personal()
     $houzhui = pathinfo($avatar_source['name']);
     // 上传成功，接收文件
     $target = '../static/uploads/' . uniqid() . '.' . $houzhui['extension'];
-    if(!move_uploaded_file($avatar_source['tmp_name'], $target)) {
+    if (!move_uploaded_file($avatar_source['tmp_name'], $target)) {
         $message = '头像更新失败';
         return;
     }
@@ -48,11 +53,9 @@ function personal()
 
     // 更新用户信息因为我的混编中的，始终拿到的是初始的session中的值，必须进行更新，把更新后的信息同步到session中，才可以在界面更新新。
     update_session($id);
-    
+
     $success = $row > 0;
     $message = $row <= 0 ? '更新失败' : '更新成功';
-
-   
 }
 
 // 首先判断当前用户提交的数据方式
@@ -65,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>投稿系统-个人中心</title>
     <!-- 引入Bootstrap.css -->
@@ -178,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- 侧边栏 -->
     <?php include './inc/slidebar.php'; ?>
 
-    
+
     <script src="/static/assets/vendors/jquery/popper.min.js"></script>
     <script src="/static/assets/vendors/boostrap/js/bootstrap.min.js"></script>
     <!-- 引入字体的js -->

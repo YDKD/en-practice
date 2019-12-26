@@ -50,7 +50,7 @@ function en_fetch_all($sql)
     mysqli_close($conn);
 
     // 返回得到的数据结果
-    return $result;
+    return empty($result) ? '' : $result;
 }
 
 // 封装单条数据查询操作
@@ -150,7 +150,8 @@ function posts_status($status)
     $dict = array(
         'wait' => '<font color="#007bff">待审核</font>',
         'pass' => '<font color="green">已通过</font>',
-        'return' => '<font color="red">已退回</font>'
+        'return' => '<font color="red">已退回</font>',
+        'draft' => '<font color="orange">已退回</font>'
     );
     return isset($dict[$status]) ? $dict[$status] : '未知状态';
 }

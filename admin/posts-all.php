@@ -1,5 +1,7 @@
 <?php
 
+// 设置时区
+date_default_timezone_set('PRC');
 // 载入配置文件
 require_once '../function.php';
 
@@ -72,7 +74,7 @@ $current_posts = en_fetch_all("SELECT * FROM posts;");
                                     <td><?php echo $item['email']; ?></td>
                                     <td><?php echo $item['title']; ?></td>
                                     <td><?php echo posts_category($item['category_id']); ?></td>
-                                    <td><?php echo cover_date($item['created']); ?></td>
+                                    <td><?php echo $item['created']; ?></td>
                                     <td><?php echo posts_status($item['status']); ?></td>
                                     <td class="text-center">
                                         <a href="/admin/posts-all-delete?id=<?php echo $item['id']; ?>" class="btn btn-danger btn-sm">删除</a>

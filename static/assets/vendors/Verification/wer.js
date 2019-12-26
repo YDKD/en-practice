@@ -1,13 +1,11 @@
-
 /*
  * @Descripttion: 
  * @version: 
  * @Author: YDKD
  * @Date: 2019-12-21 18:24:27
- * @LastEditors  : YDKD
- * @LastEditTime : 2019-12-21 20:28:53
+ * @LastEditors: YDKD
+ * @LastEditTime: 2019-12-23 13:54:38
  */
-<script>
 var nums = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
     'L', 'M', 'N', 'O', 'P', 'Q', 'R',
     'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -51,20 +49,26 @@ function drawCode() {
     }
     convertCanvasToImage(canvas)
 
+    // // 图片中的文字
+    // var newRand = rand.join('').toUpperCase();
+    // console.log(newRand);
 
-    // 点击提交进行验证
-    $("#submit").click((e) => {
-        var newRand = rand.join('').toUpperCase();
-        console.log(newRand);
+    $('#verify').on("blur", function() {
+        //获取当前文本框中的值
+        $value = $(this).val().toUpperCase();
+        // 获取图片中的文字
+        $newRand = rand.join('').toUpperCase();
+        console.log($newRand);
+        console.log($value);
+        $.get('/admin/test.php', {
+            source: $value,
+            rand: $newRand
+        }, function(res) {
+            //希望这个 res 对应的是头像的地址
 
-        //下面就是判断是否== 的代码，无需解释
-        var oValue = $('#verify').val().toUpperCase();
-        console.log(oValue)
-        if (oValue == 0) {} else if (oValue != newRand) {
-            <?php $message = '验证码错误'; ?>
-        } else {
-            <?php echo 'hello'; ?>
-        }
+            if (!res) return;
+            alert(res);
+        })
 
     })
 }
@@ -101,4 +105,3 @@ document.getElementById('code_img').onclick = function() {
     $('#verify').after('<canvas width="100" height="40" id="verifyCanvas"></canvas>')
     drawCode();
 }
-</script>

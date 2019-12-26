@@ -3,12 +3,14 @@
 require_once '../function.php';
 
 // 判断当前用户是否登录
-en_get_current_user();
-
+$current_user = en_get_current_user();
+// 获取用户邮箱
+$email = $current_user['email'];
+// 获取用户级别
+$level = $current_user['level'];
 // 目标：获取posts中的数据，并展示出来
 $current_posts = en_fetch_all("SELECT * FROM posts WHERE `status` = 'wait';");
-
-
+$current_user_posts = en_fetch_all("SELECT * FROM posts WHERE email = '{$email}' AND `status` = 'wait'");
 ?>
 
 <!DOCTYPE html>
@@ -65,20 +67,47 @@ $current_posts = en_fetch_all("SELECT * FROM posts WHERE `status` = 'wait';");
                             </tr>
                         </thead>
                         <tbody class="user-spe text-center">
-                            <?php foreach ($current_posts as $item) : ?>
+                            <!-- 1、首先确定用户级别是管理员或者专家具备查看文章的功能
+                            2、稿件存在 -->
+                            <?php if (($level == 1 || $level == 2) && is_array($current_posts)) : ?>
+                                <?php foreach ($current_posts as $item) : ?>
+                                    <tr class="con">
+                                        <td class="text-center"><input type="checkbox" data-id="<?php echo $item['id']; ?>"></td>
+                                        <td><?php echo $item['email']; ?></td>
+                                        <td><?php echo $item['title']; ?></td>
+                                        <td><?php echo posts_category($item['category_id']); ?></td>
+                                        <td><?php echo $item['created']; ?></td>
+                                        <td><?php echo posts_status($item['status']); ?></td>
+                                        <td class="text-center" id="operate">
+                                            <a href="/admin/posts-p?id=<?php echo $item['id']; ?>" class="btn btn-success btn-sm">通过</a>
+                                            <a href="/admin/posts-r?id=<?php echo $item['id']; ?>" class="btn btn-secondary btn-sm">退回</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach ?>
+                                <!-- 查看用户自己的稿件，主要用于作者自己查看 -->
+                            <?php elseif (is_array($current_user_posts)) : ?>
+                                <?php foreach ($current_user_posts as $item) : ?>
+                                    <tr class="con">
+                                        <td class="text-center"><input type="checkbox" data-id="<?php echo $item['id']; ?>"></td>
+                                        <td><?php echo $item['email']; ?></td>
+                                        <td><?php echo $item['title']; ?></td>
+                                        <td><?php echo posts_category($item['category_id']); ?></td>
+                                        <td><?php echo $item['created']; ?></td>
+                                        <td><?php echo posts_status($item['status']); ?></td>
+                                        <td>无</td>
+                                    </tr>
+                                <?php endforeach ?>
+                            <?php else : ?>
                                 <tr class="con">
                                     <td class="text-center"><input type="checkbox" data-id="<?php echo $item['id']; ?>"></td>
-                                    <td><?php echo $item['email']; ?></td>
-                                    <td><?php echo $item['title']; ?></td>
-                                    <td><?php echo posts_category($item['category_id']); ?></td>
-                                    <td><?php echo cover_date($item['created']); ?></td>
-                                    <td><?php echo posts_status($item['status']); ?></td>
-                                    <td class="text-center" id="operate">
-                                        <a href="/admin/posts-p?id=<?php echo $item['id']; ?>" class="btn btn-success btn-sm">通过</a>
-                                        <a href="/admin/posts-r?id=<?php echo $item['id']; ?>" class="btn btn-secondary btn-sm">退回</a>
-                                    </td>
+                                    <td>无</td>
+                                    <td>无</td>
+                                    <td>无</td>
+                                    <td>无</td>
+                                    <td>无</td>
+                                    <td>无</td>
                                 </tr>
-                            <?php endforeach ?>
+                            <?php endif  ?>
                         </tbody>
                     </table>
                 </div>
